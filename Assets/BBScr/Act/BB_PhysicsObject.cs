@@ -81,24 +81,25 @@ public class BB_PhysicsObject : MonoBehaviour
         groundRight = groundLeft;
         groundRight.x += collide.size.x - 0.25f;
 
-        // For left
-        leftUp = rigidbody.position + collide.offset;
+        // For left side collision
+        leftUp = rigidbody.position;
         leftUp.x -= collide.size.x / 2;
-        leftUp.y -= collide.size.y / 2;
+        leftUp.y += collide.size.y;
         leftDown = leftUp;
-        leftDown.y += collide.size.y;
+        leftDown.y -= collide.size.y * 2f;
 
-        // For left
-        rightUp = rigidbody.position + collide.offset;
-        rightUp.x += collide.size.x - (1.1f * 2) - 0.2f;
+        // For right side collision
+        rightUp = rigidbody.position;
+        rightUp.x += collide.size.x / 2;
+        rightUp.y += collide.size.y;
         rightDown = rightUp;
-        rightDown.y -= collide.size.y - 2.6f;
+        rightDown.y -= collide.size.y * 2f;
 
-        if (GameObject.Find("groundLeftBlock") != null && GameObject.Find("groundRightBlock") != null)
+        /*if (GameObject.Find("groundLeftBlock") != null && GameObject.Find("groundRightBlock") != null)
         {
-            GameObject.Find("groundLeftBlock").transform.position = leftUp;
-            GameObject.Find("groundRightBlock").transform.position = leftDown;
-        }
+            GameObject.Find("groundLeftBlock").transform.position = rightUp;
+            GameObject.Find("groundRightBlock").transform.position = rightDown;
+        }*/
 
         isGrounded = sBonkLine(groundLeft, groundRight) && (rigidbody.velocityY >= -0.1f && rigidbody.velocityY <= 0.1f);
         isLeft = sBonkLine(leftUp, leftDown, 0.095f);
@@ -107,7 +108,7 @@ public class BB_PhysicsObject : MonoBehaviour
         // DEBUGGING PURPOSES
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("INFO");
+            /*Debug.Log("INFO");
             Debug.Log("========================");
             Debug.Log("rigid " + rigidbody.position);
             Debug.Log("groundLeft " + groundLeft);
@@ -116,7 +117,7 @@ public class BB_PhysicsObject : MonoBehaviour
             Debug.Log("collide.size " + collide.size);
             Debug.Log("isGrounded " + isGrounded);
             Debug.Log("rigidbody.velocity " + rigidbody.velocity);
-            Debug.Log("========================");
+            Debug.Log("========================");*/
         }
 
         ActorUpdate();
