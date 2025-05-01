@@ -26,6 +26,8 @@ public class BB_PhysicsObject : MonoBehaviour
     protected SpriteRenderer renderer = new SpriteRenderer();
     protected BoxCollider2D collide = new BoxCollider2D();
 
+    protected Vector2 previousVelocity;
+
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
@@ -34,12 +36,12 @@ public class BB_PhysicsObject : MonoBehaviour
 
         ActorStart();
 
-        Debug.Log("BB_PhysicsObject(" + name + ") is ready.");
-
         if (alwaysActive == false)
         {
             enabled = false;
         }
+
+        Debug.Log("BB_PhysicsObject(" + name + ") is ready.");
     }
 
     public virtual void ActorStart()
@@ -47,20 +49,15 @@ public class BB_PhysicsObject : MonoBehaviour
         // Debug.Log("BB_PhysicsObject(" + name + ") : no init available");
     }
 
-    private static float sBonkBound = 0.45f;
+    private static float sBonkBound = 1.05f;
 
     private static bool sBonkLine(Vector3 s, Vector3 e, float bound = 0.0f)
     {
         Collider2D[] start;
         Collider2D[] end;
 
-        if (bound == 0.0f)
-        {
-            bound = sBonkBound;
-        }
-
-        start = Physics2D.OverlapCircleAll(s, bound);
-        end   = Physics2D.OverlapCircleAll(e, bound);
+        start = Physics2D.OverlapCircleAll(s, bound == 0.0f ? sBonkBound : bound);
+        end   = Physics2D.OverlapCircleAll(e, bound == 0.0f ? sBonkBound : bound);
 
         return start.Length > 1 || end.Length > 1;
     }
@@ -71,6 +68,7 @@ public class BB_PhysicsObject : MonoBehaviour
         {
             return;
         }
+
         // This part took so long to figure out. the axis and offsetting is so confusing. I still am not 100% how this fully works.
 
         // For ground
@@ -101,7 +99,7 @@ public class BB_PhysicsObject : MonoBehaviour
             GameObject.Find("groundRightBlock").transform.position = rightDown;
         }*/
 
-        isGrounded = sBonkLine(groundLeft, groundRight) && (rigidbody.velocityY >= -0.1f && rigidbody.velocityY <= 0.1f);
+        isGrounded = sBonkLine(groundLeft, groundRight) && (rigidbody.velocityY <= 0.1f && rigidbody.velocityY >= -0.01f);
         isLeft = sBonkLine(leftUp, leftDown, 0.095f);
         isRight = sBonkLine(rightUp, rightDown, 0.095f);
 
@@ -121,6 +119,8 @@ public class BB_PhysicsObject : MonoBehaviour
         }
 
         ActorUpdate();
+
+        previousVelocity = rigidbody.velocity;
     }
 
     public virtual void ActorUpdate()

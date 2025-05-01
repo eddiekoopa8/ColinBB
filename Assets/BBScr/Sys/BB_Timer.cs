@@ -40,6 +40,11 @@ public class BB_Timer
         return tick;
     }
 
+    public float GetTickCountdown()
+    {
+        return maxTick;
+    }
+
     public void Tick()
     {
         tick = Done() ? maxTick : tick + incrementer;

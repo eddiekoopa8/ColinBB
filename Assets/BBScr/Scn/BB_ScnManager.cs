@@ -19,6 +19,11 @@ public class ScnManager : MonoBehaviour
     const string SCN_MANAGER_INSTANCENAME = "ScnMain";
     const bool Debugm = true;
 
+    Vector2 cameraPosition;
+    Vector2 cameraShake;
+
+    int cameraShakeLevel;
+
     static GameObject getScnObj_(string scnObj)
     {
         string[] hierarchy = scnObj.Split('/');
@@ -79,10 +84,42 @@ public class ScnManager : MonoBehaviour
         return GetObject("ScnPrior/ScnPriorCamera").GetComponent<Camera>();
     }
 
+    public void SetCameraPosition(Vector2 vector)
+    {
+        cameraPosition = vector;
+    }
+
+    public void SetCameraPosition(float x, float y)
+    {
+        SetCameraPosition(new Vector2(x, y));
+    }
+
+    public void SetCameraShakeLevel(int level)
+    {
+        cameraShakeLevel = level;
+    }
+
+    System.Random rngGen;
+
     /** MONOBEHAVIOUR OVERRIDES **/
     private void Start()
     {
-        Debug.Assert(gameObject.name == SCN_MANAGER_INSTANCENAME, "Must call it " + SCN_MANAGER_INSTANCENAME);
+        Debug.Assert(gameObject.name == SCN_MANAGER_INSTANCENAME, "Must call it from " + SCN_MANAGER_INSTANCENAME);
         init_();
+        cameraPosition = GetCamera().transform.position;
+        cameraShake = new Vector2(0, 0);
+        cameraShakeLevel = 5;
+
+        rngGen = new System.Random();
+    }
+
+    private void Update()
+    {
+        if (cameraShakeLevel != 0)
+        {
+            cameraShake.x = rngGen.Next(0, (cameraShakeLevel / 2));
+            cameraShake.y = rngGen.Next(0, (cameraShakeLevel / 2));
+        }
+        GetCamera().transform.position = cameraPosition + cameraShake;
     }
 }
