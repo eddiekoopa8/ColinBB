@@ -1,28 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BB_Timer
 {
     float tick;
-    float incrementer;
     float maxTick;
 
-    public BB_Timer(float tickCountDown, float increment = 1)
+    public BB_Timer(float tickCountDown)
     {
         Reset();
         SetTickCountdown(tickCountDown);
-        SetIncrement(increment);
     }
 
     public void SetTickCountdown(float tickCountDown)
     {
         maxTick = tickCountDown;
-    }
-
-    public void SetIncrement(float increment)
-    {
-        incrementer = increment;
     }
 
     public void Reset()
@@ -45,8 +39,14 @@ public class BB_Timer
         return maxTick;
     }
 
-    public void Tick()
+    public void Tick(bool fixedUpdate = false)
     {
-        tick = Done() ? maxTick : tick + incrementer;
+        float inc = Time.deltaTime;
+        if (fixedUpdate)
+        {
+            inc = Time.fixedDeltaTime;
+        }
+
+        tick = Done() ? maxTick : tick + inc;
     }
 }

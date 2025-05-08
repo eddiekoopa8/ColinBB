@@ -22,7 +22,7 @@ public class ScnManager : MonoBehaviour
     Vector2 cameraPosition;
     Vector2 cameraShake;
 
-    int cameraShakeLevel;
+    float cameraShakeLevel;
 
     static GameObject getScnObj_(string scnObj)
     {
@@ -84,6 +84,15 @@ public class ScnManager : MonoBehaviour
         return GetObject("ScnPrior/ScnPriorCamera").GetComponent<Camera>();
     }
 
+    /// <summary>
+    /// Goto to a new scene via name
+    /// </summary>
+    /// <param name="name">Scene Name.</param>
+    public static void Goto(string name)
+    {
+        SCENEManager.ChangeScene(name);
+    }
+
     public void SetCameraPosition(Vector2 vector)
     {
         cameraPosition = vector;
@@ -94,7 +103,7 @@ public class ScnManager : MonoBehaviour
         SetCameraPosition(new Vector2(x, y));
     }
 
-    public void SetCameraShakeLevel(int level)
+    public void SetCameraShakeLevel(float level)
     {
         cameraShakeLevel = level;
     }
@@ -108,18 +117,28 @@ public class ScnManager : MonoBehaviour
         init_();
         cameraPosition = GetCamera().transform.position;
         cameraShake = new Vector2(0, 0);
-        cameraShakeLevel = 5;
+        cameraShakeLevel = 0;
 
         rngGen = new System.Random();
     }
 
     private void Update()
     {
-        if (cameraShakeLevel != 0)
+        if (cameraShakeLevel > 0)
         {
-            cameraShake.x = rngGen.Next(0, (cameraShakeLevel / 2));
-            cameraShake.y = rngGen.Next(0, (cameraShakeLevel / 2));
+            int shake = (int)(cameraShakeLevel * 10000) / 2;
+            cameraShake.x = (float)rngGen.Next(-shake, shake) / 10000;
+            cameraShake.y = (float)rngGen.Next(-shake, shake) / 10000;
         }
         GetCamera().transform.position = cameraPosition + cameraShake;
+
+        if (cameraShakeLevel > 0)
+        {
+            cameraShakeLevel -= 0.035f;
+        }
+        if (cameraShakeLevel < 0)
+        {
+            cameraShakeLevel = 0;
+        }
     }
 }

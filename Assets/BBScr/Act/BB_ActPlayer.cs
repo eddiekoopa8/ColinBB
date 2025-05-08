@@ -15,7 +15,7 @@ public class BB_ActPlayer : BB_PhysicsObject
     public float JumpHeight = 14.25f;
     public float CrouchJumpHeight = 8.56f;
     public float NormalFallSpeed = 18.0f;
-    public float PoundLimitSpeed = 14.0f;
+    public float PoundLimitSpeed = 20.0f;
     public float XSpeed = 10.0f;
     public float XAcceleration = 0.225f;
     public float ChargeXSpeed = 22.0f;
@@ -26,6 +26,7 @@ public class BB_ActPlayer : BB_PhysicsObject
     Dir direction = Dir.RIGHT;
 
     bool moving = false;
+    bool pressMove = false;
     bool restrictMoving = false;
 
     bool jumping = false;
@@ -39,6 +40,7 @@ public class BB_ActPlayer : BB_PhysicsObject
     bool pounding = false;
 
     bool crouching = false;
+    bool pressCrouch = false;
 
     bool knocked = false;
 
@@ -54,7 +56,7 @@ public class BB_ActPlayer : BB_PhysicsObject
         prevDirection = direction;
     }
 
-    bool pressMoveKey()
+    bool hasPressMoveKey()
     {
         return Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
     }
@@ -67,6 +69,10 @@ public class BB_ActPlayer : BB_PhysicsObject
         // Crouching
         if (Input.GetKey(KeyCode.DownArrow) && !moving && isGrounded)
         {
+            if (!crouching)
+            {
+                pressCrouch = true;
+            }
             crouching = true;
         }
         else
@@ -75,8 +81,12 @@ public class BB_ActPlayer : BB_PhysicsObject
         }
 
         // Moving state
-        if (pressMoveKey() && !restrictMoving)
+        if (hasPressMoveKey() && !restrictMoving)
         {
+            if (!moving)
+            {
+                pressMove = true;
+            }
             moving = true;
         }
         else
@@ -233,7 +243,7 @@ public class BB_ActPlayer : BB_PhysicsObject
 
         if (pounding)
         {
-            rigidbody.velocityX = ((CrouchJumpHeight / 1.25f)) * getDirectionNegate();
+            rigidbody.velocityX = (CrouchJumpHeight / 1.25f) * getDirectionNegate();
 
             restrictMoving = true;
 
@@ -242,6 +252,8 @@ public class BB_ActPlayer : BB_PhysicsObject
                 if (previousVelocity.y <= -PoundLimitSpeed)
                 {
                     Debug.Log("BOOOOOM !!!!!!!!!!!");
+                    Debug.Log("was " + previousVelocity.y);
+                    ScnManager.Instance().SetCameraShakeLevel(3);
                 }
                 restrictMoving = false;
                 pounding = false;
@@ -259,8 +271,52 @@ public class BB_ActPlayer : BB_PhysicsObject
         }
     }
 
+    bool fallAnim = false;
+    void playerAnimByLogic()
+    {
+        if (pressMove)
+        {
+            Debug.Log("ColinAnim:MOVE_ANIM");
+        }
+
+        if (pressCharge)
+        {
+            Debug.Log("ColinAnim:CHARGE_ANIM");
+        }
+
+        if (pressCrouch)
+        {
+            Debug.Log("ColinAnim:CROUCH_ANIM");
+        }
+
+        if (pressJump && !isGrounded && !charging)
+        {
+            if (crouching)
+            {
+                Debug.Log("ColinAnim:CROUCH_JUMP_ANIM");
+            }
+            else
+            {
+                Debug.Log("ColinAnim:JUMP_ANIM");
+            }
+        }
+
+        if (isGrounded && rigidbody.velocityY < 0 && fallAnim == false)
+        {
+            Debug.Log("ColinAnim:FALL_ANIM");
+            fallAnim = true;
+        }
+
+        if (isGrounded)
+        {
+            fallAnim = false;
+        }
+    }
+
     void playerPostLogic()
     {
+        playerAnimByLogic();
+
         // Jumping check
         if (isGrounded && jumping)
         {
@@ -271,6 +327,8 @@ public class BB_ActPlayer : BB_PhysicsObject
         // Reset press booleans
         pressJump = false;
         pressCharge = false;
+        pressCrouch = false;
+        pressMove = false;
 
         // Update previous direction
         if (prevDirection != direction)
