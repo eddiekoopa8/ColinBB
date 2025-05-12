@@ -66,9 +66,10 @@ public class BB_PhysicsObject : MonoBehaviour
             return;
         }
 
-        // This part took so long to figure out. the axis and offsetting is so confusing. I still am not 100% how this fully works.
+        /*
+        // THIS IS VERY VERY VERY VERY **VERY** BAD CODE!!!!!
 
-        // For ground
+         For ground
         groundLeft = rigidbody.position + collide.offset;
         groundLeft.x -= (collide.size.x / 2) - 0.13f;
         groundLeft.y -= collide.size.y;
@@ -90,24 +91,18 @@ public class BB_PhysicsObject : MonoBehaviour
         rightUp.y += collide.size.y;
         rightDown = rightUp;
         rightDown.y -= collide.size.y * 2f;
-
-        if (GameObject.Find("AAAA_2") != null && GameObject.Find("AAAA") != null)
-        {
-            GameObject.Find("AAAA").transform.position = groundLeft;
-            GameObject.Find("AAAA_2").transform.position = groundRight;
-        }
-
-        if (GameObject.Find("AAAA_2 (1)") != null && GameObject.Find("AAAA (1)") != null)
-        {
-            GameObject.Find("AAAA (1)").transform.position = leftUp;
-            GameObject.Find("AAAA_2 (1)").transform.position = leftDown;
-        }
-
-        if (GameObject.Find("AAAA_2 (2)") != null && GameObject.Find("AAAA (2)") != null)
-        {
-            GameObject.Find("AAAA (2)").transform.position = rightUp;
-            GameObject.Find("AAAA_2 (2)").transform.position = rightDown;
-        }
+        */
+        
+        Vector2 collideCenter = collide.bounds.center;
+        Vector2 collideExtents = collide.bounds.extents;
+        groundLeft = new Vector2(collideCenter.x - collideExtents.x, collideCenter.y - collideExtents.y);
+        groundRight = new Vector2(collideCenter.x + collideExtents.x, collideCenter.y - collideExtents.y);
+        
+        rightUp = new Vector2(collideCenter.x - collideExtents.x, (collideCenter.y + collideExtents.y) - 1);
+        leftDown = new Vector2(collideCenter.x - collideExtents.x, (collideCenter.y - collideExtents.y) + 1);
+        
+        leftUp = new Vector2(collideCenter.x + collideExtents.x, (collideCenter.y + collideExtents.y) - 1);
+        rightDown = new Vector2(collideCenter.x + collideExtents.x, (collideCenter.y - collideExtents.y) + 1);
 
         isGrounded = sBonkLine(groundLeft, groundRight) && (rigidbody.velocityY <= 0.1f && rigidbody.velocityY >= -0.01f);
         isLeft = sBonkLine(leftUp, leftDown, 0.095f);

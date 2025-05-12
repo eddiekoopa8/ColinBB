@@ -36,19 +36,50 @@ public class BB_ActPlayer : BB_PhysicsObject
     bool charging = false;
     bool pressCharge = false;
     bool abortCharge = false;
-
     bool pounding = false;
 
     bool crouching = false;
     bool pressCrouch = false;
+    bool hadPounded = false;
 
     bool knocked = false;
 
     BB_Timer chargerTimer;
     BB_Timer knockTimer;
-
+    public static BB_ActPlayer GetInstance()
+    {
+        return GameObject.Find("ScnPlayer").GetComponent<BB_ActPlayer>();
+    }
+    public static GameObject GetObject()
+    {
+        return GameObject.Find("ScnPlayer");
+    }
+    public static bool Collided(Collision2D col)
+    {
+        return col.gameObject == GetObject();
+    }
+    public static bool Pounded()
+    {
+        return GetInstance().hadPounded;
+    }
+    public static bool Charging()
+    {
+        return GetInstance().charging;
+    }
+    public static void ForceStopCharge(float yvel = 0.0f, bool knocked = false)
+    {
+        GetInstance().rigidbody.velocityY += yvel;
+        if (knocked)
+        {
+            GetInstance().knocked = true;
+        }
+        GetInstance().abortCharge = true;
+        GetInstance().restrictMoving = true;
+    }
     public override void ActorStart()
     {
+        Debug.Assert(gameObject.name == "ScnPlayer", "player MUST be ScnPlayer. for GetInsance");
+
         knockTimer = new BB_Timer(100);
         chargerTimer = new BB_Timer(100);
 
@@ -66,6 +97,9 @@ public class BB_ActPlayer : BB_PhysicsObject
     }
     void playerPreLogic()
     {
+        // Reset shared settings
+        hadPounded = false;
+
         // Crouching
         if (Input.GetKey(KeyCode.DownArrow) && !moving && isGrounded)
         {
@@ -113,7 +147,7 @@ public class BB_ActPlayer : BB_PhysicsObject
         }
 
         // Charging state
-        if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded && !charging)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded && !isLeft && !isRight && !charging)
         {
             charging = true;
             abortCharge = false;
@@ -254,6 +288,7 @@ public class BB_ActPlayer : BB_PhysicsObject
                     Debug.Log("BOOOOOM !!!!!!!!!!!");
                     Debug.Log("was " + previousVelocity.y);
                     ScnManager.Instance().SetCameraShakeLevel(3);
+                    hadPounded = true;
                 }
                 restrictMoving = false;
                 pounding = false;
@@ -291,6 +326,7 @@ public class BB_ActPlayer : BB_PhysicsObject
 
         if (pressJump && !isGrounded && !charging)
         {
+            fallAnim = true;
             if (crouching)
             {
                 Debug.Log("ColinAnim:CROUCH_JUMP_ANIM");
@@ -301,7 +337,7 @@ public class BB_ActPlayer : BB_PhysicsObject
             }
         }
 
-        if (isGrounded && rigidbody.velocityY < 0 && fallAnim == false)
+        if (!isGrounded && !pressJump && fallAnim == false)
         {
             Debug.Log("ColinAnim:FALL_ANIM");
             fallAnim = true;

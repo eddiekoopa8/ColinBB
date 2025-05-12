@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a83a370641ef7f84f86697a28f33d56a
+guid: a4d83ba927b71c74ba73dd2fc9cc2a97
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6279630918941904735
-    second: bbscnui_dlgBox_0
+      213: -4171764066437745470
+    second: TILESCave_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,30 +122,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bbscnui_dlgBox_0
+      name: TILESCave_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 8
-        height: 8
+        width: 640
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f5f8714cc0bb52750800000000000000
-      internalID: 6279630918941904735
+      spriteID: 2c43d3d3faaea16c0800000000000000
+      internalID: -4171764066437745470
       vertices: []
       indices: 
       edges: []
@@ -169,8 +156,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      bbscnui_dlgBox_0: 6279630918941904735
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

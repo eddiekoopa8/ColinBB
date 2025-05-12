@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a83a370641ef7f84f86697a28f33d56a
+guid: 76b27e525c4eae940bb9ed702d9527e1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6279630918941904735
-    second: bbscnui_dlgBox_0
+      213: -1670669414952162930
+    second: Back1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,30 +122,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bbscnui_dlgBox_0
+      name: Back1_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 104
         y: 0
-        width: 8
-        height: 8
+        width: 214
+        height: 207
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f5f8714cc0bb52750800000000000000
-      internalID: 6279630918941904735
+      spriteID: e89aaa8c40790d8e0800000000000000
+      internalID: -1670669414952162930
       vertices: []
       indices: 
       edges: []
@@ -169,8 +156,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      bbscnui_dlgBox_0: 6279630918941904735
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
