@@ -12,7 +12,7 @@ public class BB_ActPlayer : BB_PhysicsObject
         RIGHT,
     };
 
-    public float JumpHeight = 14.25f;
+    public float JumpHeight = 15f;
     public float CrouchJumpHeight = 8.56f;
     public float NormalFallSpeed = 18.0f;
     public float PoundLimitSpeed = 20.0f;
@@ -56,7 +56,7 @@ public class BB_ActPlayer : BB_PhysicsObject
     }
     public static bool Collided(Collision2D col)
     {
-        return col.gameObject == GetObject();
+        return col.gameObject == GetObject() && (GetInstance().isLeft || GetInstance().isRight);
     }
     public static bool Pounded()
     {
@@ -197,7 +197,7 @@ public class BB_ActPlayer : BB_PhysicsObject
             else
             {
                 rigidbody.velocityY = JumpHeight;
-                if (moving && compareSpeed(XSpeed))
+                if (charging)
                 {
                     rigidbody.velocityY += 2.0f;
                 }

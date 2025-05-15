@@ -24,6 +24,8 @@ public class ScnManager : MonoBehaviour
 
     float cameraShakeLevel;
 
+    public GameObject FollowObject;
+
     static GameObject getScnObj_(string scnObj)
     {
         string[] hierarchy = scnObj.Split('/');
@@ -120,8 +122,13 @@ public class ScnManager : MonoBehaviour
         cameraShakeLevel = 0;
 
         rngGen = new System.Random();
-    }
 
+        if (GameObject.Find("ScnPointStart") != null)
+        {
+            Debug.Log("ScnPointStart");
+        }
+    }
+    Vector3 fPos;
     private void Update()
     {
         if (cameraShakeLevel > 0)
@@ -139,6 +146,39 @@ public class ScnManager : MonoBehaviour
         if (cameraShakeLevel < 0)
         {
             cameraShakeLevel = 0;
+        }
+
+        GameObject startXBound = GameObject.Find("ScnXPointStart");
+        GameObject endXBound = GameObject.Find("ScnXPointEnd");
+        if (FollowObject)
+        {
+            Vector3 newPos = FollowObject.transform.position;
+
+            if (startXBound || endXBound)
+            {
+                if (startXBound)
+                {
+                    if (newPos.x <= startXBound.transform.position.x)
+                    {
+                        newPos.x = startXBound.transform.position.x;
+                    }
+                }
+                if (endXBound)
+                {
+                    if (newPos.x >= endXBound.transform.position.x)
+                    {
+                        newPos.x = endXBound.transform.position.x;
+                    }
+                }
+            }
+            else
+            {
+                newPos.x = cameraPosition.x;
+            }
+
+            newPos.y = cameraPosition.y;
+
+            cameraPosition = newPos;
         }
     }
 }
