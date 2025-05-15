@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3519449811887217356}
   m_Layer: 0
   m_Name: BB_Dialog
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
