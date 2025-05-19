@@ -36,6 +36,7 @@ public class BB_ActPlayer : BB_PhysicsObject
     bool charging = false;
     bool pressCharge = false;
     bool abortCharge = false;
+    bool chargeKnock = false;
     bool pounding = false;
 
     bool crouching = false;
@@ -62,9 +63,9 @@ public class BB_ActPlayer : BB_PhysicsObject
     {
         return GetInstance().hadPounded;
     }
-    public static bool Charging()
+    public static bool IsDamaging()
     {
-        return GetInstance().charging;
+        return GetInstance().charging || GetInstance().chargeKnock || GetInstance().pounding;
     }
     public static void ForceStopCharge(float yvel = 0.0f, bool knocked = false)
     {
@@ -74,6 +75,7 @@ public class BB_ActPlayer : BB_PhysicsObject
             GetInstance().knocked = true;
         }
         GetInstance().abortCharge = true;
+        GetInstance().charging = false;
         GetInstance().restrictMoving = true;
     }
     public override void ActorStart()
@@ -240,6 +242,8 @@ public class BB_ActPlayer : BB_PhysicsObject
                 if ((isLeft || isRight))
                 {
                     knocked = true;
+                    charging = true;
+                    chargeKnock = true;
                 }
                 abortCharge = true;
                 restrictMoving = true;
@@ -262,6 +266,7 @@ public class BB_ActPlayer : BB_PhysicsObject
 
             if (knockTimer.Done())
             {
+                chargeKnock = false;
                 restrictMoving = false;
                 restrictJumping = false;
                 knocked = false;

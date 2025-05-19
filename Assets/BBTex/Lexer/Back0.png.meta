@@ -134,10 +134,10 @@ TextureImporter:
         serializedVersion: 2
         x: 7
         y: 0
-        width: 358
-        height: 453
+        width: 505
+        height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -149,38 +149,18 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Back0_1
-      rect:
-        serializedVersion: 2
-        x: 413
-        y: 0
-        width: 65
-        height: 131
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 53714575391fa8490800000000000000
-      internalID: -7743110994182531275
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: eabba039936f1ba4083b332d216fe2e3
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Back0_0: 8685868044504060070
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

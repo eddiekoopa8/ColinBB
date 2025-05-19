@@ -9,23 +9,29 @@ public class BB_ActEnemy : BB_PhysicsObject
     BB_Timer stunTime;
     bool moving;
     bool stunned;
+    int dir;
     public override void ActorStart()
     {
         stunTime = new BB_Timer(1000);
         moving = true;
         stunned = false;
+        dir = -1;
     }
 
     public override void ActorUpdate()
     {
-        
-        if (moving && !stunned)
+        if (isLeft && dir == -1)
         {
-            if ((isLeft && speed == -3) || (isRight && speed == 3))
-            {
-                speed = -speed;
-            }
-            rigidbody.velocityX = speed;
+            dir = 1;
+        }
+        else if (isRight && dir == 1)
+        {
+            dir = -1;
+        }
+
+        if (moving)
+        {
+            rigidbody.velocityX = speed * dir;
         }
         else
         {
@@ -58,7 +64,7 @@ public class BB_ActEnemy : BB_PhysicsObject
     {
         if (BB_ActPlayer.Collided(collision))
         {
-            if (BB_ActPlayer.Charging())
+            if (BB_ActPlayer.IsDamaging() || BB_ActPlayer.Pounded())
             {
                 BB_ActPlayer.ForceStopCharge();
                 Destroy(gameObject);
