@@ -20,5 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/BBScn/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/BBScn/Level0.unity
+    guid: cb0088c89a6cd514cb0b99e7ecede4c1
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
