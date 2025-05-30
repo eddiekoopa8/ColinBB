@@ -98,10 +98,10 @@ public class BB_PhysicsObject : MonoBehaviour
         groundLeft = new Vector2(collideCenter.x - collideExtents.x, collideCenter.y - collideExtents.y);
         groundRight = new Vector2(collideCenter.x + collideExtents.x, collideCenter.y - collideExtents.y);
         
-        rightUp = new Vector2(collideCenter.x - collideExtents.x, (collideCenter.y + collideExtents.y) - 1);
+        leftUp = new Vector2(collideCenter.x - collideExtents.x, (collideCenter.y + collideExtents.y) - 1);
         leftDown = new Vector2(collideCenter.x - collideExtents.x, (collideCenter.y - collideExtents.y) + 1);
         
-        leftUp = new Vector2(collideCenter.x + collideExtents.x, (collideCenter.y + collideExtents.y) - 1);
+        rightUp = new Vector2(collideCenter.x + collideExtents.x, (collideCenter.y + collideExtents.y) - 1);
         rightDown = new Vector2(collideCenter.x + collideExtents.x, (collideCenter.y - collideExtents.y) + 1);
 
         isGrounded = sBonkLine(groundLeft, groundRight) && (rigidbody.velocityY <= 0.1f && rigidbody.velocityY >= -0.01f);
@@ -109,7 +109,7 @@ public class BB_PhysicsObject : MonoBehaviour
         isRight = sBonkLine(rightUp, rightDown, 0.095f);
 
         // DEBUGGING PURPOSES
-        if (Input.GetKeyDown(KeyCode.Space))
+        //if (Input.GetKeyDown(KeyCode.Space))
         {
             /*Debug.Log("INFO");
             Debug.Log("========================");

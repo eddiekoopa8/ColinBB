@@ -94,6 +94,13 @@ public class ScnManager : MonoBehaviour
     {
         SCENEManager.ChangeScene(name);
     }
+    /// <summary>
+    /// Restart current scene
+    /// </summary>
+    public static void Reload()
+    {
+        SCENEManager.Restart();
+    }
 
     public void SetCameraPosition(Vector2 vector)
     {

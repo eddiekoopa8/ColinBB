@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class BB_ActPlayer : BB_PhysicsObject
@@ -11,6 +10,8 @@ public class BB_ActPlayer : BB_PhysicsObject
         LEFT,
         RIGHT,
     };
+    
+    Animator animator;
 
     public float JumpHeight = 15f;
     public float CrouchJumpHeight = 8.56f;
@@ -38,12 +39,16 @@ public class BB_ActPlayer : BB_PhysicsObject
     bool abortCharge = false;
     bool chargeKnock = false;
     bool pounding = false;
+    bool damaged = false;
 
     bool crouching = false;
     bool pressCrouch = false;
     bool hadPounded = false;
 
     bool knocked = false;
+    bool gotkey = false;
+    
+    int health = 0;
 
     BB_Timer chargerTimer;
     BB_Timer knockTimer;
@@ -55,9 +60,25 @@ public class BB_ActPlayer : BB_PhysicsObject
     {
         return GameObject.Find("ScnPlayer");
     }
+    public static bool HasKey()
+    {
+        return GetInstance().gotkey;
+    }
+    public static void FoundKey()
+    {
+        GetInstance().gotkey = true;
+    }
+    public static int GetHealth()
+    {
+        return GetInstance().health;
+    }
     public static bool Collided(Collision2D col)
     {
-        return col.gameObject == GetObject() && (GetInstance().isLeft || GetInstance().isRight);
+        return col.gameObject == GetObject() && (GetInstance().isLeft || GetInstance().isRight || GetInstance().isGrounded);
+    }
+    public static bool CollidedNoCheck(Collision2D col)
+    {
+        return col.gameObject == GetObject();
     }
     public static bool Pounded()
     {
@@ -67,8 +88,9 @@ public class BB_ActPlayer : BB_PhysicsObject
     {
         return GetInstance().charging || GetInstance().chargeKnock || GetInstance().pounding;
     }
-    public static void ForceStopCharge(float yvel = 0.0f, bool knocked = false)
+    public static void ForceStopCharge(float yvel = 0.0f, bool knocked = false, bool isdamage = false)
     {
+        if (GetInstance().damaged) return;
         GetInstance().rigidbody.velocityY += yvel;
         if (knocked)
         {
@@ -77,9 +99,19 @@ public class BB_ActPlayer : BB_PhysicsObject
         GetInstance().abortCharge = true;
         GetInstance().charging = false;
         GetInstance().restrictMoving = true;
+        
+        if (isdamage)
+        {
+            GetInstance().health--;
+            GetInstance().damaged = true;
+            ScnManager.Instance().SetCameraShakeLevel(1);
+        }
+
     }
     public override void ActorStart()
     {
+        animator = GetComponent<Animator>();
+        
         Debug.Assert(gameObject.name == "ScnPlayer", "player MUST be ScnPlayer. for GetInsance");
 
         knockTimer = new BB_Timer(100);
@@ -87,6 +119,8 @@ public class BB_ActPlayer : BB_PhysicsObject
 
         currFallSpeed = NormalFallSpeed;
         prevDirection = direction;
+        health = 3;
+        gotkey = false;
     }
 
     bool hasPressMoveKey()
@@ -174,12 +208,12 @@ public class BB_ActPlayer : BB_PhysicsObject
 
         if (direction == Dir.LEFT && moving)
         {
-            rigidbody.velocityX = rigidbody.velocityX <= -XSpeed ? -XSpeed : rigidbody.velocityX - XAcceleration;
+            rigidbody.velocityX = rigidbody.velocityX <= -XSpeed ? -XSpeed : rigidbody.velocityX - (XAcceleration*1.5f);
         }
 
         if (direction == Dir.RIGHT && moving)
         {
-            rigidbody.velocityX = rigidbody.velocityX >= XSpeed ? XSpeed : rigidbody.velocityX + XAcceleration;
+            rigidbody.velocityX = rigidbody.velocityX >= XSpeed ? XSpeed : rigidbody.velocityX + (XAcceleration*1.5f);
         }
 
         if (!moving)
@@ -261,7 +295,7 @@ public class BB_ActPlayer : BB_PhysicsObject
 
             knockTimer.Tick();
 
-            float vel = (knockTimer.GetTickCountdown() - knockTimer.GetCurrentTick()) / 12;
+            float vel = (knockTimer.GetTickCountdown() - knockTimer.GetCurrentTick()) / 25;
             rigidbody.velocityX = vel * -getDirectionNegate();
 
             if (knockTimer.Done())
@@ -269,9 +303,21 @@ public class BB_ActPlayer : BB_PhysicsObject
                 chargeKnock = false;
                 restrictMoving = false;
                 restrictJumping = false;
+                damaged = false;
+                renderer.enabled = true;
                 knocked = false;
                 knockTimer.Reset();
             }
+        }
+        
+        if (damaged)
+        {
+            renderer.enabled = !renderer.enabled;
+        }
+        
+        if (health <= 0)
+        {
+            ScnManager.Reload();
         }
 
         /* CROUCHING */
@@ -314,19 +360,27 @@ public class BB_ActPlayer : BB_PhysicsObject
     bool fallAnim = false;
     void playerAnimByLogic()
     {
-        if (pressMove)
+        if (!charging && !moving && !crouching && !pounding)
+        {
+            animator.Play("IDLE");
+        }
+
+        if (pressMove && !charging)
         {
             Debug.Log("ColinAnim:MOVE_ANIM");
+            animator.Play("RUN");
         }
 
         if (pressCharge)
         {
             Debug.Log("ColinAnim:CHARGE_ANIM");
+            animator.Play("CHARGE");
         }
 
-        if (pressCrouch)
+        if (pressCrouch && !charging)
         {
             Debug.Log("ColinAnim:CROUCH_ANIM");
+            animator.Play("IDLE");
         }
 
         if (pressJump && !isGrounded && !charging)
@@ -335,16 +389,19 @@ public class BB_ActPlayer : BB_PhysicsObject
             if (crouching)
             {
                 Debug.Log("ColinAnim:CROUCH_JUMP_ANIM");
+                animator.Play("POUND");
             }
             else
             {
                 Debug.Log("ColinAnim:JUMP_ANIM");
+                animator.Play("RUN");
             }
         }
 
         if (!isGrounded && !pressJump && fallAnim == false)
         {
             Debug.Log("ColinAnim:FALL_ANIM");
+            animator.Play("RUN");
             fallAnim = true;
         }
 
@@ -352,6 +409,8 @@ public class BB_ActPlayer : BB_PhysicsObject
         {
             fallAnim = false;
         }
+        
+        renderer.flipX = direction == Dir.LEFT;
     }
 
     void playerPostLogic()

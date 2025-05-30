@@ -22,6 +22,7 @@ public class BB_ActCrate : BB_PhysicsObject
             if (BB_ActPlayer.IsDamaging() || BB_ActPlayer.Pounded())
             {
                 BB_ActPlayer.ForceStopCharge(0, true);
+                ScnManager.Instance().SetCameraShakeLevel(2);
                 Destroy(gameObject);
             }
         }

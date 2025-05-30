@@ -122,6 +122,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -358,7 +371,7 @@ TextureImporter:
         - {x: 64, y: 64}
         - {x: -64, y: 64}
         - {x: -64, y: -64}
-        - {x: 58, y: -64}
+        - {x: 64, y: -64}
       tessellationDetail: 0
       bones: []
       spriteID: d9255dfdea5326e42bb8361c5da048be
@@ -383,8 +396,8 @@ TextureImporter:
       - - {x: 64, y: 64}
         - {x: -64, y: 64}
         - {x: -64, y: -56}
-        - {x: -60, y: -61}
-        - {x: -56, y: -64}
+        - {x: -64, y: -61}
+        - {x: -64, y: -64}
         - {x: 64, y: -64}
       tessellationDetail: 0
       bones: []
@@ -486,8 +499,8 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: 64, y: 58}
-        - {x: 57, y: 64}
+      - - {x: -12, y: -8}
+        - {x: -20, y: 61}
         - {x: -64, y: 64}
         - {x: -64, y: -64}
         - {x: 64, y: -64}
@@ -513,8 +526,8 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: 64, y: 64}
-        - {x: -58, y: 64}
-        - {x: -64, y: 58}
+        - {x: 34, y: 36}
+        - {x: 19, y: -6}
         - {x: -64, y: -64}
         - {x: 64, y: -64}
       tessellationDetail: 0

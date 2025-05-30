@@ -10,6 +10,16 @@ public class BB_ActEnemy : BB_PhysicsObject
     bool moving;
     bool stunned;
     int dir;
+    int dirTimeCool = 5;
+    bool canDir = true;
+    void FixedUpdate()
+    {
+        if (dirTimeCool++ >= 5)
+        {
+            dirTimeCool = 5;
+            canDir = true;
+        }
+    }
     public override void ActorStart()
     {
         stunTime = new BB_Timer(1000);
@@ -23,10 +33,14 @@ public class BB_ActEnemy : BB_PhysicsObject
         if (isLeft && dir == -1)
         {
             dir = 1;
+            canDir = false;
+            dirTimeCool = 0;
         }
         else if (isRight && dir == 1)
         {
             dir = -1;
+            canDir = false;
+            dirTimeCool = 0;
         }
 
         if (moving)
@@ -58,6 +72,9 @@ public class BB_ActEnemy : BB_PhysicsObject
             rigidbody.velocityY = 6;
             rigidbody.velocityX = 0;
         }
+        
+        renderer.flipX = dir == 1;
+        renderer.flipY = stunned == true;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -67,7 +84,11 @@ public class BB_ActEnemy : BB_PhysicsObject
             if (BB_ActPlayer.IsDamaging() || BB_ActPlayer.Pounded())
             {
                 BB_ActPlayer.ForceStopCharge();
+                ScnManager.Instance().SetCameraShakeLevel(0.25f);
                 Destroy(gameObject);
+            }
+            else {
+                BB_ActPlayer.ForceStopCharge(1, true, true);
             }
         }
     }
