@@ -86,6 +86,7 @@ public class BB_ActEnemy : BB_PhysicsObject
                 BB_ActPlayer.ForceStopCharge();
                 ScnManager.Instance().SetCameraShakeLevel(0.25f);
                 Destroy(gameObject);
+                BB_ActPlayer.PlaySnd("EnmHit");
             }
             else {
                 BB_ActPlayer.ForceStopCharge(1, true, true);

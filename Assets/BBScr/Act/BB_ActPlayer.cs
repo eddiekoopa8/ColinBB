@@ -60,6 +60,11 @@ public class BB_ActPlayer : BB_PhysicsObject
     {
         return GameObject.Find("ScnPlayer");
     }
+    public static void PlaySnd(string name)
+    {
+        if (GameObject.Find("ScnPlayer" + name + "Snd").GetComponent<AudioSource>().isPlaying == false)
+            GameObject.Find("ScnPlayer" + name + "Snd").GetComponent<AudioSource>().Play();
+    }
     public static bool HasKey()
     {
         return GetInstance().gotkey;
@@ -103,6 +108,7 @@ public class BB_ActPlayer : BB_PhysicsObject
         if (isdamage)
         {
             GetInstance().health--;
+            PlaySnd("Hit");
             GetInstance().damaged = true;
             ScnManager.Instance().SetCameraShakeLevel(1);
         }
@@ -180,14 +186,16 @@ public class BB_ActPlayer : BB_PhysicsObject
             jumping = true;
             pressJump = true;
             isGrounded = false;
+            PlaySnd("Jump");
         }
 
         // Charging state
-        if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded && !isLeft && !isRight && !charging)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded && !isLeft && !isRight && !charging && !knocked)
         {
             charging = true;
             abortCharge = false;
             pressCharge = true;
+            PlaySnd("Charge");
         }
     }
 
@@ -276,6 +284,7 @@ public class BB_ActPlayer : BB_PhysicsObject
                 if ((isLeft || isRight))
                 {
                     knocked = true;
+                    PlaySnd("Hit");
                     charging = true;
                     chargeKnock = true;
                 }
@@ -339,6 +348,8 @@ public class BB_ActPlayer : BB_PhysicsObject
                     Debug.Log("BOOOOOM !!!!!!!!!!!");
                     Debug.Log("was " + previousVelocity.y);
                     ScnManager.Instance().SetCameraShakeLevel(3);
+                    PlaySnd("Crate");
+                    PlaySnd("Explode");
                     hadPounded = true;
                 }
                 restrictMoving = false;

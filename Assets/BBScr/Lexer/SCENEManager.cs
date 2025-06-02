@@ -9,12 +9,7 @@ using System;
 
 public class SCENEManager
 {
-    static bool restarting = false;
-    static void Start()
-    {
-        Debug.Log($"scene manage is ready.");
-        restarting = false;
-    }
+    //static bool restarting = false;
 
     public static void ChangeScene(int id)
     {
@@ -28,10 +23,10 @@ public class SCENEManager
 
     public static void Restart()
     {
-        if (!restarting)
+        //if (!restarting)
         {
-            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
-            restarting = true;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+            //restarting = true;
         }
     }
 

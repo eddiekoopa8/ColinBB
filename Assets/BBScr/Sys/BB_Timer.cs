@@ -13,7 +13,7 @@ public class BB_Timer
     {
         Reset();
         SetTickCountdown(tickCountDown);
-        SetTiedToDelta(false);
+        SetTiedToDelta(true);
     }
     
     public void SetTiedToDelta(bool flag) {
@@ -47,10 +47,14 @@ public class BB_Timer
 
     public void Tick(bool fixedUpdate = false)
     {
-        float inc = Time.deltaTime;
+        float inc;
+
+        /* Gonna sob for 72 hours. */
+        inc = Time.deltaTime * 200;
+
         if (fixedUpdate)
         {
-            inc = Time.fixedDeltaTime;
+        //    inc = 0.63f - Time.fixedDeltaTime;
         }
         
         if (!tiedToDelta) {

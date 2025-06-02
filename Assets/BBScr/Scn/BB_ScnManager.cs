@@ -148,7 +148,7 @@ public class ScnManager : MonoBehaviour
 
         if (cameraShakeLevel > 0)
         {
-            cameraShakeLevel -= 0.035f;
+            cameraShakeLevel -= Time.deltaTime * 5;
         }
         if (cameraShakeLevel < 0)
         {

@@ -24,6 +24,7 @@ public class BB_ActCrate : BB_PhysicsObject
                 BB_ActPlayer.ForceStopCharge(0, true);
                 ScnManager.Instance().SetCameraShakeLevel(2);
                 Destroy(gameObject);
+                BB_ActPlayer.PlaySnd("Crate");
             }
         }
     }
