@@ -138,6 +138,10 @@ public class ScnManager : MonoBehaviour
     Vector3 fPos;
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SCENEManager.ExitGame();
+        }
         if (cameraShakeLevel > 0)
         {
             int shake = (int)(cameraShakeLevel * 10000) / 2;
