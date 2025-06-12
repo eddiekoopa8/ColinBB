@@ -77,11 +77,11 @@ public class BB_ActEnemy : BB_PhysicsObject
         renderer.flipY = stunned == true;
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionStay2D(Collision2D collision)
     {
         if (BB_ActPlayer.Collided(collision))
         {
-            if (BB_ActPlayer.IsDamaging() || BB_ActPlayer.Pounded())
+            if (BB_ActPlayer.IsDamaging())
             {
                 BB_ActPlayer.ForceStopCharge();
                 ScnManager.Instance().SetCameraShakeLevel(0.25f);
@@ -89,7 +89,10 @@ public class BB_ActEnemy : BB_PhysicsObject
                 BB_ActPlayer.PlaySnd("EnmHit");
             }
             else {
-                BB_ActPlayer.ForceStopCharge(1, true, true);
+                if (!stunned)
+                {
+                    BB_ActPlayer.ForceStopCharge(1, true, true);
+                }
             }
         }
     }
